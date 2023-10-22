@@ -6,7 +6,7 @@ AR		:= ar
 SRC_DIR		:= src
 OBJ_DIR		:= build
 DEP_DIR		:= $(OBJ_DIR)
-SRC_FILES	:= src/ctype.c
+SRC_FILES	:= src/ctype.c src/string.c
 OBJ_FILES	:= $(patsubst %.c,$(OBJ_DIR)/%.o,$(SRC_FILES))
 DEP_FILES	:= $(patsubst %.c,$(DEP_DIR)/%.d,$(SRC_FILES))
 
@@ -14,7 +14,7 @@ all: $(STATIC_LIB)
 
 $(STATIC_LIB): $(OBJ_FILES)
 	rm -f $@
-	ar rcs $@ $<
+	ar rcs $@ $(OBJ_FILES)
 
 $(OBJ_DIR)/%.o: %.c Makefile
 	mkdir -p $(@D)

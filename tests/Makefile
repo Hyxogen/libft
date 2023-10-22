@@ -10,7 +10,7 @@ CFLAGS		:= -I../include -MMD -MP
 
 all: $(DRIVER_FILES)
 
-$(OBJ_DIR)/%.out: $(SRC_DIR)/%.c Makefile
+$(OBJ_DIR)/%.out: $(SRC_DIR)/%.c Makefile ../libft.a
 	mkdir -p $(@D)
 	$(CC) -o $@ $< $(CFLAGS) ../libft.a
 	./$@
