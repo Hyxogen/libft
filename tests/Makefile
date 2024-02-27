@@ -6,7 +6,7 @@ SRC_FILES	:= $(shell find . -type f -name '*.c')
 DRIVER_FILES	:= $(patsubst %.c,$(OBJ_DIR)/%.out,$(SRC_FILES))
 DEP_FILES	:= $(patsubst %.c,$(DEP_DIR)/%.d,$(SRC_FILES))
 
-CFLAGS		:= -I../include -MMD -MP
+CFLAGS		:= -I../include -MMD -MP -g3 -fsanitize=address,undefined
 
 all: $(DRIVER_FILES)
 
@@ -19,4 +19,5 @@ clean:
 	rm -rf $(OBJ_DIR)
 	rm -rf $(DEP_DIR)
 
+.PRECIOUS: $(DRIVER_FILES)
 .PHONY: all clean

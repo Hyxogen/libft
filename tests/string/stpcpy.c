@@ -12,6 +12,8 @@ static void test(const char *str)
 	assert((a + len) == ft_stpcpy(a, str));
 	stpcpy(b, str);
 	assert(!strcmp(a, b));
+	free(a);
+	free(b);
 }
 
 int main()

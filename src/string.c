@@ -1,5 +1,7 @@
 #include <ft/string.h>
 
+#include <stdlib.h>
+
 void *ft_memcpy(void *restrict dest, const void *restrict src, size_t n)
 {
 	unsigned char *d = dest;
@@ -121,4 +123,53 @@ size_t ft_strlen(const char *str)
 	while (*tmp)
 		++tmp;
 	return tmp - str;
+}
+
+char *ft_strdup(const char *src)
+{
+	size_t n = ft_strlen(src) + 1;
+	char *s = malloc(n);
+
+	if (s)
+		ft_memcpy(s, src, n);
+	return s;
+}
+
+char *ft_strndup(const char *src, size_t size)
+{
+	char *s = malloc(size + 1);
+
+	if (!s)
+		return s;
+
+	char *p = ft_memccpy(s, src, 0x0, size + 1);
+	if (!p)
+		s[size] = '\0';
+	return s;
+}
+
+int ft_strcmp(const char *s1, const char *s2)
+{
+	const unsigned char *p1 = (const unsigned char *)s1;
+	const unsigned char *p2 = (const unsigned char *)s2;
+
+	int val = 0;
+	while ((val = (*p1 - *p2)) == 0 && *p1) {
+		++p1;
+		++p2;
+	}
+	return val;
+}
+
+int ft_strncmp(const char *s1, const char *s2, size_t n)
+{
+	const unsigned char *p1 = (const unsigned char *)s1;
+	const unsigned char *p2 = (const unsigned char *)s2;
+
+	int val = 0;
+	while (n-- && (val = (*p1 - *p2)) == 0 && *p1) {
+		++p1;
+		++p2;
+	}
+	return val;
 }
