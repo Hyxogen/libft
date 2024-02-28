@@ -16,5 +16,6 @@ int ft___signbit(double x);
 int ft___signbitf(float x);
 
 float ft_fminf(float x, float y);
+float ft_fmaxf(float x, float y);
 
 #endif

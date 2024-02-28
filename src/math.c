@@ -29,3 +29,14 @@ float ft_fminf(float x, float y)
 		return ft_signbit(x) ? x : y;
 	return x < y ? x : y;
 }
+
+float ft_fmaxf(float x, float y)
+{
+	if (ft_isnan(x))
+		return y;
+	if (ft_isnan(y))
+		return x;
+	if (ft_signbit(x) != ft_signbit(y))
+		return ft_signbit(x) ? y : x;
+	return x > y ? x : y;
+}
