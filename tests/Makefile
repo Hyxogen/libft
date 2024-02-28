@@ -6,7 +6,7 @@ SRC_FILES	:= $(shell find . -type f -name '*.c')
 DRIVER_FILES	:= $(patsubst %.c,$(OBJ_DIR)/%.out,$(SRC_FILES))
 DEP_FILES	:= $(patsubst %.c,$(DEP_DIR)/%.d,$(SRC_FILES))
 
-CFLAGS		:= -I../include -MMD -MP -g3 -fsanitize=address,undefined
+CFLAGS		:= -I../include -MMD -MP -g3 -fsanitize=address,undefined -lm
 
 all: $(DRIVER_FILES)
 

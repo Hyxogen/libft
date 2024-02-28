@@ -7,7 +7,7 @@ AR		:= ar
 SRC_DIR		:= src
 OBJ_DIR		:= build
 DEP_DIR		:= $(OBJ_DIR)
-SRC_FILES	:= src/ctype.c src/string.c src/stdlib.c src/strings.c src/getopt.c
+SRC_FILES	:= src/ctype.c src/string.c src/stdlib.c src/strings.c src/getopt.c src/math.c
 OBJ_FILES	:= $(patsubst %.c,$(OBJ_DIR)/%.o,$(SRC_FILES))
 DEP_FILES	:= $(patsubst %.c,$(DEP_DIR)/%.d,$(SRC_FILES))
 
