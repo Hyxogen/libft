@@ -16,11 +16,25 @@ ifndef san
 endif
 
 ifeq ($(san), addr)
-	CFLAGS += -fsanitize=address,undefined -g3
+	CFLAGS += -fsanitize=address,undefined
 else ifeq ($(san), mem)
-	CFLAGS += -fsantizie=memory,undefined -fsanitize-memory-track-origins -g3
+	CFLAGS += -fsantizie=memory,undefined -fsanitize-memory-track-origins
 else
 $(error "$(san): invalid sanitizer")
+endif
+
+ifndef config
+	config	:= debug
+endif
+
+ifeq ($(config), debug)
+	CFLAGS += -g3 -fno-inline
+else ifeq ($(config), release)
+	CFLAGS +=  -g -O1
+else ifeq ($(config), distr)
+	CFLAGS += -g0 -O3
+else
+$(error "$(config): invalid config")
 endif
 
 all: $(STATIC_LIB)
