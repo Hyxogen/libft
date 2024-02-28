@@ -173,3 +173,12 @@ int ft_strncmp(const char *s1, const char *s2, size_t n)
 	}
 	return val;
 }
+
+char *ft_strchr(const char *s, int c)
+{
+	while (*s != (char) c) {
+		if (!*s++)
+			return NULL;
+	}
+	return (char *) s;
+}

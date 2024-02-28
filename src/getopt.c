@@ -1,9 +1,8 @@
+#include <ft/string.h>
 #include <ft/getopt.h>
-#include <assert.h>
 #include <getopt.h>
 #include <stdio.h>
 #include <stdarg.h>
-#include <string.h>
 
 int ft_optind = 0, ft_opterr = 0, ft_optopt = 0;
 char *ft_optarg = NULL;
@@ -118,14 +117,14 @@ static int do_getopt_short(int argc, char **argv, const char *optstring)
 	if (colon)
 		++optstring;
 
-	if (!strcmp(argv[ft_optind], "--")) {
+	if (!ft_strcmp(argv[ft_optind], "--")) {
 		++ft_optind;
 		return -1;
 	}
 
 	char *cur = argv[ft_optind];
 	int opt = cur[ft_optchar++];
-	const char *pos = strchr(optstring, opt);
+	const char *pos = ft_strchr(optstring, opt);
 
 	if (!pos) {
 		ft_optopt = opt;
