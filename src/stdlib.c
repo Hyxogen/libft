@@ -3,6 +3,8 @@
 #include <ft/strings.h>
 #include <limits.h>
 #include <errno.h>
+#include <stdint.h>
+#include <stdlib.h>
 
 static const unsigned char table[] = {
 	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
@@ -99,4 +101,21 @@ static unsigned long long strtox(const char *restrict str,
 long ft_strtol(const char *restrict str, char **restrict endptr, int base)
 {
 	return (long)strtox(str, endptr, base, (unsigned long long)LONG_MIN);
+}
+
+static uint64_t seed = 1;
+
+void ft_srand(unsigned s)
+{
+	if (!s)
+		seed = 1;
+	seed = s;
+}
+
+int ft_rand(void)
+{
+	seed ^= seed << 13;
+	seed ^= seed >> 7;
+	seed ^= seed << 17;
+	return seed % RAND_MAX;
 }
