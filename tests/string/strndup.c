@@ -18,6 +18,7 @@ static void test_one(const char *str)
 
 int main()
 {
+	free(ft_strndup(NULL, 0));
 	test_one("");
 	test_one("hello world!");
 	test_one(

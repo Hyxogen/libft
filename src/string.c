@@ -142,7 +142,8 @@ char *ft_strndup(const char *src, size_t size)
 	if (!s)
 		return s;
 
-	char *p = ft_memccpy(s, src, 0x0, size + 1);
+	char *p = ft_memccpy(s, src, 0x0, size);
+
 	if (!p)
 		s[size] = '\0';
 	return s;
