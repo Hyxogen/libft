@@ -9,6 +9,11 @@ struct printf_fd {
 	int fd;
 };
 
+struct snprintf_ctx {
+	char *str;
+	size_t size;
+};
+
 static int write_signed(char *dest, intmax_t v)
 {
 	int val = v % 10;
@@ -359,6 +364,18 @@ static int write_to_fd(int ch, void *opaque)
 	return 1;
 }
 
+static int write_to_buffer(int ch, void *opaque)
+{
+	struct snprintf_ctx *ctx = (struct snprintf_ctx*) opaque;
+	char c = ch;
+
+	if (ctx->size) {
+		*ctx->str++ = c;
+		ctx->size -= 1;
+	}
+	return 1;
+}
+
 int ft_printf(const char *fmt, ...)
 {
 	va_list args;
@@ -379,6 +396,19 @@ int ft_dprintf(int fd, const char *fmt, ...)
 	struct printf_fd ctx = { fd };
 
 	int res = vprintx(fmt, args, write_to_fd, &ctx);
+
+	va_end(args);
+	return res;
+}
+
+int ft_snprintf(char *str, size_t size, const char *fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+
+	struct snprintf_ctx ctx = { str, size };
+
+	int res = vprintx(fmt, args, write_to_buffer, &ctx);
 
 	va_end(args);
 	return res;
