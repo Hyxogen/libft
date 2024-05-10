@@ -103,6 +103,11 @@ long ft_strtol(const char *restrict str, char **restrict endptr, int base)
 	return (long)strtox(str, endptr, base, (unsigned long long)LONG_MIN);
 }
 
+long ft_atol(const char *str)
+{
+	return ft_strtol(str, NULL, 10);
+}
+
 static uint64_t seed = 1;
 
 void ft_srand(unsigned s)

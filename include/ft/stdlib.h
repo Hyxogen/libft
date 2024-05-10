@@ -5,5 +5,6 @@ void ft_srand(unsigned s);
 int ft_rand(void);
 
 long ft_strtol(const char *restrict nptr, char **restrict endptr, int base);
+long ft_atol(const char *str);
 
 #endif
