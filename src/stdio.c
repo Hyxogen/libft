@@ -410,6 +410,11 @@ int ft_snprintf(char *str, size_t size, const char *fmt, ...)
 
 	int res = vprintx(fmt, args, write_to_buffer, &ctx);
 
+	if (size && !ctx.size)
+		str[size - 1] = '\0';
+	else if (ctx.size)
+		*ctx.str = '\0';
+
 	va_end(args);
 	return res;
 }
