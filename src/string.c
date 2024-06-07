@@ -183,3 +183,47 @@ char *ft_strchr(const char *s, int c)
 	}
 	return (char *)s;
 }
+
+char *ft_strrchr(const char *s, int c)
+{
+	const char *res = NULL;
+	do {
+		if (*s == (char)c)
+			res = s;
+
+	} while (*s++);
+	return (char *)res;
+}
+
+static char *ft_strchrset(const char *str, const char *charset)
+{
+	char *closest_pos;
+	char *char_pos;
+
+	closest_pos = 0;
+	while (*charset) {
+		char_pos = ft_strchr(str, *charset);
+		if (char_pos && (!closest_pos || char_pos < closest_pos))
+			closest_pos = char_pos;
+		charset++;
+	}
+	return (closest_pos);
+}
+
+char *ft_strsep(char **stringp, const char *delim)
+{
+	if (!*stringp)
+		return NULL;
+
+	char *copy;
+	char *delim_pos;
+
+	copy = *stringp;
+	delim_pos = ft_strchrset(*stringp, delim);
+	if (delim_pos) {
+		*delim_pos = '\0';
+		*stringp = delim_pos + 1;
+	} else
+		*stringp = 0;
+	return (copy);
+}

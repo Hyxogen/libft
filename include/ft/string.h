@@ -37,4 +37,6 @@ char *ft_strtok(char *restrict, const char *restrict);
 char *ft_strtok_r(char *restrict, const char *restrict, char **restrict);
 size_t ft_strxfrm(char *restrict, const char *restrict, size_t);
 
+char *ft_strsep(char **stringp, const char *delim);
+
 #endif
