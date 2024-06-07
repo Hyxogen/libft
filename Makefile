@@ -7,7 +7,7 @@ AR		:= ar
 SRC_DIR		:= src
 OBJ_DIR		:= build
 DEP_DIR		:= $(OBJ_DIR)
-SRC_FILES	:= src/ctype.c src/string.c src/stdlib.c src/strings.c src/getopt.c src/math.c src/stdio.c
+SRC_FILES	:= src/ctype.c src/string.c src/stdlib.c src/strings.c src/getopt.c src/math.c src/stdio.c src/ft.c
 OBJ_FILES	:= $(patsubst %.c,$(OBJ_DIR)/%.o,$(SRC_FILES))
 DEP_FILES	:= $(patsubst %.c,$(DEP_DIR)/%.d,$(SRC_FILES))
 
@@ -24,7 +24,7 @@ $(error "$(san): invalid sanitizer")
 endif
 
 ifndef config
-	config	:= debug
+	config	:= distr
 endif
 
 ifeq ($(config), debug)
@@ -38,6 +38,8 @@ $(error "$(config): invalid config")
 endif
 
 all: $(STATIC_LIB)
+
+bonus: all
 
 $(STATIC_LIB): $(OBJ_FILES)
 	rm -f $@
@@ -65,4 +67,4 @@ re:
 	${MAKE}
 
 -include $(DEP_FILES)
-.PHONY: all clean fclean re
+.PHONY: all bonus clean fclean re
