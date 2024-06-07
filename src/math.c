@@ -6,7 +6,7 @@ int ft___signbit(double x)
 	union {
 		double d;
 		uint64_t i;
-	} y = { x };
+	} y = {x};
 	return y.i >> 63;
 }
 
@@ -15,7 +15,7 @@ int ft___signbitf(float x)
 	union {
 		float f;
 		uint32_t i;
-	} y = { x };
+	} y = {x};
 	return y.i >> 31;
 }
 

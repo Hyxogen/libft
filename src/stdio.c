@@ -1,9 +1,9 @@
+#include <ft/ctype.h>
+#include <ft/stdio.h>
+#include <ft/string.h>
 #include <stdarg.h>
 #include <stdint.h>
 #include <unistd.h>
-#include <ft/stdio.h>
-#include <ft/ctype.h>
-#include <ft/string.h>
 
 struct printf_fd {
 	int fd;
@@ -39,7 +39,8 @@ static int write_unsigned(char *dest, uintmax_t v, const char *base, int radix)
 	return nwritten;
 }
 
-static int writestr(const char *str, size_t len, int (*put)(int c, void*), void* opaque)
+static int writestr(const char *str, size_t len, int (*put)(int c, void *),
+		    void *opaque)
 {
 	int nwritten = 0;
 
@@ -52,7 +53,7 @@ static int writestr(const char *str, size_t len, int (*put)(int c, void*), void*
 	return nwritten;
 }
 
-static int pad(int ch, size_t n, int (*put)(int c, void*), void *opaque)
+static int pad(int ch, size_t n, int (*put)(int c, void *), void *opaque)
 {
 	int nwritten = 0;
 
@@ -66,7 +67,8 @@ static int pad(int ch, size_t n, int (*put)(int c, void*), void *opaque)
 }
 
 static int write_num(const char *num, int numlen, const char *prefix,
-		size_t prefixlen, char padding, int minus, int width, int prec, int (*put)(int c, void*), void *opaque)
+		     size_t prefixlen, char padding, int minus, int width,
+		     int prec, int (*put)(int c, void *), void *opaque)
 {
 	int nwritten = 0;
 	int totallen = numlen + prefixlen;
@@ -107,7 +109,8 @@ write_error:
 	return -1;
 }
 
-static int vprintx(const char *fmt, va_list ap, int (*put)(int c, void*), void *opaque)
+static int vprintx(const char *fmt, va_list ap, int (*put)(int c, void *),
+		   void *opaque)
 {
 	int nwritten = 0;
 	while (*fmt) {
@@ -178,7 +181,7 @@ static int vprintx(const char *fmt, va_list ap, int (*put)(int c, void*), void *
 				if (*fmt == '-') {
 					fmt += 1;
 
-				} else  {
+				} else {
 					prec = 0;
 
 					while (ft_isdigit(*fmt)) {
@@ -212,140 +215,145 @@ static int vprintx(const char *fmt, va_list ap, int (*put)(int c, void*), void *
 		int padding = zero ? '0' : ' ';
 
 		switch (*fmt) {
-			case 'd':
-			case 'i': {
-				intmax_t v;
+		case 'd':
+		case 'i': {
+			intmax_t v;
 
-				if (size == 'L')
-					v = va_arg(ap, long long);
-				else if (size == 'l')
-					v = va_arg(ap, long);
-				else
-					v = va_arg(ap, int);
+			if (size == 'L')
+				v = va_arg(ap, long long);
+			else if (size == 'l')
+				v = va_arg(ap, long);
+			else
+				v = va_arg(ap, int);
 
-				int numlen = write_signed(buf, v);
+			int numlen = write_signed(buf, v);
 
-				const char *prefix = "";
-				if (v < 0)
-					prefix = "-";
-				else if (plus)
-					prefix = "+";
-				else if (space)
-					prefix = " ";
+			const char *prefix = "";
+			if (v < 0)
+				prefix = "-";
+			else if (plus)
+				prefix = "+";
+			else if (space)
+				prefix = " ";
 
-				int prefixlen = v < 0 || plus || space;
-				int ret = write_num(buf, numlen, prefix, prefixlen, padding, minus, width, prec, put, opaque);
+			int prefixlen = v < 0 || plus || space;
+			int ret =
+			    write_num(buf, numlen, prefix, prefixlen, padding,
+				      minus, width, prec, put, opaque);
+			if (ret < 0)
+				goto write_error;
+			nwritten += ret;
+			break;
+		}
+		case 'o':
+		case 'u':
+		case 'x':
+		case 'X':
+		case 'p': {
+			uintmax_t v;
+
+			if (*fmt == 'p') {
+				v = (uintmax_t)(uintptr_t)va_arg(ap, void *);
+				hash = 1;
+			} else if (size == 'z') {
+				v = va_arg(ap, size_t);
+			} else if (size == 'L') {
+				v = va_arg(ap, unsigned long long);
+			} else if (size == 'l') {
+				v = va_arg(ap, unsigned long);
+			} else {
+				v = va_arg(ap, unsigned int);
+			}
+
+			int radix = 10;
+			const char *base = "0123456789abcdef";
+			const char *prefix = "";
+
+			if (*fmt == 'o') {
+				radix = 8;
+				if (hash)
+					prefix = "0";
+			} else if (*fmt == 'x' || *fmt == 'p') {
+				radix = 16;
+				if (hash)
+					prefix = "0x";
+			} else if (*fmt == 'X') {
+				radix = 16;
+				base = "0123456789ABCDEF";
+				if (hash)
+					prefix = "0X";
+			}
+
+			int numlen = write_unsigned(buf, v, base, radix);
+			int ret =
+			    write_num(buf, numlen, prefix, ft_strlen(prefix),
+				      padding, minus, width, prec, put, opaque);
+			if (ret < 0)
+				goto write_error;
+			nwritten += ret;
+			break;
+		}
+		case 's': {
+			const char *s = va_arg(ap, const char *);
+			size_t slen = ft_strlen(s);
+			size_t len = (size_t)prec < slen ? (size_t)prec : slen;
+			size_t padlen = (width > 0 && len < (size_t)width)
+					    ? width - len
+					    : 0;
+
+			int ret;
+			if (!minus) {
+				ret = pad(padding, padlen, put, opaque);
 				if (ret < 0)
 					goto write_error;
 				nwritten += ret;
-				break;
 			}
-			case 'o':
-			case 'u':
-			case 'x':
-			case 'X':
-			case 'p': {
-				uintmax_t v;
 
-				if (*fmt == 'p') {
-					v = (uintmax_t) (uintptr_t) va_arg(ap, void*);
-					hash = 1;
-				} else if (size == 'z') {
-					v = va_arg(ap, size_t);
-				} else if (size == 'L') {
-					v = va_arg(ap, unsigned long long);
-				} else if (size == 'l') {
-					v = va_arg(ap, unsigned long);
-				} else {
-					v = va_arg(ap, unsigned int);
-				}
+			ret = writestr(s, len, put, opaque);
+			if (ret < 0)
+				goto write_error;
+			nwritten += ret;
 
-				int radix = 10;
-				const char *base = "0123456789abcdef";
-				const char *prefix = "";
-
-				if (*fmt == 'o') {
-					radix = 8;
-					if (hash)
-						prefix = "0";
-				} else if (*fmt == 'x' || *fmt == 'p') {
-					radix = 16;
-					if (hash)
-						prefix = "0x";
-				} else if (*fmt == 'X') {
-					radix = 16;
-					base = "0123456789ABCDEF";
-					if (hash)
-						prefix = "0X";
-				}
-
-				int numlen = write_unsigned(buf, v, base, radix);
-				int ret = write_num(buf, numlen, prefix, ft_strlen(prefix), padding, minus, width, prec, put, opaque);
+			if (minus) {
+				ret = pad(padding, padlen, put, opaque);
 				if (ret < 0)
 					goto write_error;
 				nwritten += ret;
-				break;
-			}
-			case 's': {
-				  const char *s = va_arg(ap, const char *);
-				  size_t slen = ft_strlen(s);
-				  size_t len = (size_t) prec < slen ? (size_t) prec : slen;
-				  size_t padlen = (width > 0 && len < (size_t) width) ? width - len : 0;
-
-				  int ret;
-				  if (!minus) {
-					  ret = pad(padding, padlen, put, opaque);
-					  if (ret < 0)
-						  goto write_error;
-					  nwritten += ret;
-				  }
-
-				  ret = writestr(s, len, put, opaque);
-				  if (ret < 0)
-					  goto write_error;
-				  nwritten += ret;
-
-				  if (minus) {
-					  ret = pad(padding, padlen, put, opaque);
-					  if (ret < 0)
-						  goto write_error;
-					  nwritten += ret;
-				  }
-
-				  break;
-			}
-			case 'c': {
-				  int ch = va_arg(ap, int);
-				  int padlen = width > 0 ? width - 1 : 0;
-
-				  int ret;
-				  if (!minus) {
-					  ret = pad(padding, padlen, put, opaque);
-					  if (ret < 0)
-						  goto write_error;
-					  nwritten += ret;
-				  }
-
-				  ret = put(ch, opaque);
-				  if (ret < 0)
-					  goto write_error;
-				  nwritten += ret;
-
-				  if (minus) {
-					  ret = pad(padding, padlen, put, opaque);
-					  if (ret < 0)
-						  goto write_error;
-					  nwritten += ret;
-				  }
-				  break;
-			}
-			case '%': {
-				  int ret = put('%', opaque);
-				  if (ret < 0)
-					  goto write_error;
-				  break;
 			}
 
+			break;
+		}
+		case 'c': {
+			int ch = va_arg(ap, int);
+			int padlen = width > 0 ? width - 1 : 0;
+
+			int ret;
+			if (!minus) {
+				ret = pad(padding, padlen, put, opaque);
+				if (ret < 0)
+					goto write_error;
+				nwritten += ret;
+			}
+
+			ret = put(ch, opaque);
+			if (ret < 0)
+				goto write_error;
+			nwritten += ret;
+
+			if (minus) {
+				ret = pad(padding, padlen, put, opaque);
+				if (ret < 0)
+					goto write_error;
+				nwritten += ret;
+			}
+			break;
+		}
+		case '%': {
+			int ret = put('%', opaque);
+			if (ret < 0)
+				goto write_error;
+			break;
+		}
 		}
 
 		fmt += 1;
@@ -358,7 +366,7 @@ write_error:
 
 static int write_to_fd(int ch, void *opaque)
 {
-	struct printf_fd *fd = (struct printf_fd*) opaque;
+	struct printf_fd *fd = (struct printf_fd *)opaque;
 	char c = ch;
 	write(fd->fd, &c, 1);
 	return 1;
@@ -366,7 +374,7 @@ static int write_to_fd(int ch, void *opaque)
 
 static int write_to_buffer(int ch, void *opaque)
 {
-	struct snprintf_ctx *ctx = (struct snprintf_ctx*) opaque;
+	struct snprintf_ctx *ctx = (struct snprintf_ctx *)opaque;
 	char c = ch;
 
 	if (ctx->size) {
@@ -381,7 +389,7 @@ int ft_printf(const char *fmt, ...)
 	va_list args;
 	va_start(args, fmt);
 
-	struct printf_fd ctx = { STDOUT_FILENO };
+	struct printf_fd ctx = {STDOUT_FILENO};
 	int res = vprintx(fmt, args, write_to_fd, &ctx);
 
 	va_end(args);
@@ -393,7 +401,7 @@ int ft_dprintf(int fd, const char *fmt, ...)
 	va_list args;
 	va_start(args, fmt);
 
-	struct printf_fd ctx = { fd };
+	struct printf_fd ctx = {fd};
 
 	int res = vprintx(fmt, args, write_to_fd, &ctx);
 
@@ -406,7 +414,7 @@ int ft_snprintf(char *str, size_t size, const char *fmt, ...)
 	va_list args;
 	va_start(args, fmt);
 
-	struct snprintf_ctx ctx = { str, size };
+	struct snprintf_ctx ctx = {str, size};
 
 	int res = vprintx(fmt, args, write_to_buffer, &ctx);
 

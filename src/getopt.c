@@ -1,8 +1,8 @@
-#include <ft/string.h>
 #include <ft/getopt.h>
+#include <ft/string.h>
 #include <getopt.h>
-#include <stdio.h>
 #include <stdarg.h>
+#include <stdio.h>
 
 int ft_optind = 0, ft_opterr = 0, ft_optopt = 0;
 char *ft_optarg = NULL;
@@ -62,9 +62,9 @@ static int do_getopt_long(int argc, char **argv, const char *optstring,
 				ft_optopt = opt->val;
 				if (!colon && ft_opterr)
 					print_error(
-						argv[0],
-						"option '--%s' doesn't allow an argument\n",
-						opt->name);
+					    argv[0],
+					    "option '--%s' doesn't allow an argument\n",
+					    opt->name);
 				return '?';
 			}
 			ft_optarg = arg + 1;
@@ -75,9 +75,9 @@ static int do_getopt_long(int argc, char **argv, const char *optstring,
 					return ':';
 				if (ft_opterr)
 					print_error(
-						argv[0],
-						"option '--%s' requires an argument\n",
-						opt->name);
+					    argv[0],
+					    "option '--%s' requires an argument\n",
+					    opt->name);
 				return '?';
 			}
 			++ft_optind;
@@ -150,9 +150,9 @@ static int do_getopt_short(int argc, char **argv, const char *optstring)
 				return ':';
 			if (ft_opterr)
 				print_error(
-					argv[0],
-					"option requires an argument -- '%c'\n",
-					ft_optopt);
+				    argv[0],
+				    "option requires an argument -- '%c'\n",
+				    ft_optopt);
 			return '?';
 		}
 	}
@@ -181,8 +181,8 @@ static int do_getopt_common(int argc, char **argv, const char *optstring,
 
 	int res;
 	if (ft_optchar == 1 && longopts && argv[ft_optind][1] == '-') {
-		res = do_getopt_long(argc, argv, optstring, longopts,
-				     longindex);
+		res =
+		    do_getopt_long(argc, argv, optstring, longopts, longindex);
 	} else {
 		res = do_getopt_short(argc, argv, optstring);
 
