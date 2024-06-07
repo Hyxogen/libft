@@ -1,5 +1,6 @@
-#include <ft/strings.h>
 #include <ft/ctype.h>
+#include <ft/string.h>
+#include <ft/strings.h>
 
 int ft_strcasecmp(const char *s1, const char *s2)
 {
@@ -26,3 +27,5 @@ int ft_strncasecmp(const char *s1, const char *s2, size_t n)
 	}
 	return val;
 }
+
+void ft_bzero(void *s, size_t n) { ft_memset(s, 0, n); }
