@@ -7,4 +7,6 @@ int ft_rand(void);
 long ft_strtol(const char *restrict nptr, char **restrict endptr, int base);
 long ft_atol(const char *str);
 
+char *ft_getenv(const char *name);
+
 #endif

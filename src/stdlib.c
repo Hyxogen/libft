@@ -1,6 +1,7 @@
 #include <errno.h>
 #include <ft/ctype.h>
 #include <ft/stdlib.h>
+#include <ft/string.h>
 #include <ft/strings.h>
 #include <limits.h>
 #include <stdint.h>
@@ -119,4 +120,19 @@ int ft_rand(void)
 	seed ^= seed >> 7;
 	seed ^= seed << 17;
 	return seed % RAND_MAX;
+}
+
+extern char **environ;
+
+char *ft_getenv(const char *name)
+{
+	if (environ) {
+		size_t len = ft_strlen(name);
+
+		for (char **env = environ; *env; ++env) {
+			if (!ft_strncmp(name, *env, len) && (*env)[len] == '=')
+				return &(*env)[len + 1];
+		}
+	}
+	return NULL;
 }
