@@ -396,6 +396,13 @@ int ft_printf(const char *fmt, ...)
 	return res;
 }
 
+int ft_vprintf(const char *fmt, va_list ap)
+{
+	struct printf_fd ctx = {STDOUT_FILENO};
+
+	return vprintx(fmt, ap, write_to_fd, &ctx);
+}
+
 int ft_dprintf(int fd, const char *fmt, ...)
 {
 	va_list args;
@@ -407,6 +414,13 @@ int ft_dprintf(int fd, const char *fmt, ...)
 
 	va_end(args);
 	return res;
+}
+
+int ft_vdprintf(int fd, const char *fmt, va_list ap)
+{
+	struct printf_fd ctx = {fd};
+
+	return vprintx(fmt, ap, write_to_fd, &ctx);
 }
 
 int ft_snprintf(char *str, size_t size, const char *fmt, ...)
