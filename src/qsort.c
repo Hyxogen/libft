@@ -34,7 +34,7 @@ static size_t partition(void *ptr, size_t size, size_t begin, size_t end,
 		swap(a, b, opaque);
 
 		++i;
-		--i;
+		--j;
 	}
 	return j;
 }
