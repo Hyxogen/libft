@@ -141,3 +141,16 @@ char *ft_getenv(const char *name)
 	}
 	return NULL;
 }
+
+void *ft_calloc(size_t nmemb, size_t size)
+{
+	size_t nbytes = nmemb * size;
+
+	if (size && (nbytes / size) != nmemb) {
+		errno = ENOMEM;
+		return NULL; /* would overflow */
+	}
+
+	void *p = malloc(nbytes);
+	return ft_memset(p, 0, nbytes);
+}

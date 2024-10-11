@@ -15,4 +15,6 @@ char *ft_getenv(const char *name);
 void ft_qsort(void *ptr, size_t count, size_t size,
 	      int (*comp)(const void *, const void *));
 
+void *ft_calloc(size_t nmemb, size_t size);
+
 #endif
