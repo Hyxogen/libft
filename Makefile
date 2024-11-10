@@ -1,6 +1,6 @@
 STATIC_LIB	:= libft.a
 
-CC		:= clang
+CC		?= clang
 CFLAGS		:= -std=c11 -Wall -Wextra -Iinclude -pedantic -MMD -MP -fPIC
 
 AR		:= ar
