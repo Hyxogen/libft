@@ -19,7 +19,7 @@ endif
 ifeq ($(san), addr)
 	CFLAGS += -fsanitize=address,undefined
 else ifeq ($(san), mem)
-	CFLAGS += -fsantizie=memory,undefined -fsanitize-memory-track-origins
+	CFLAGS += -fsanitize=memory,undefined -fsanitize-memory-track-origins
 else ifneq ($(san), none)
 $(error "$(san): invalid sanitizer")
 endif
