@@ -3,9 +3,7 @@
 
 #include <math.h> // for __STDC_IEC_559__
 
-#ifndef __STDC_IEC_559__
-#error "Only IEEE 754 floating point is supported"
-#endif
+#ifdef __STDC_IEC_559__
 #define ft_isnan(arg) ((arg) != (arg))
 #define ft_signbit(arg)                     \
 	_Generic((arg),                     \
@@ -17,5 +15,6 @@ int ft___signbitf(float x);
 
 float ft_fminf(float x, float y);
 float ft_fmaxf(float x, float y);
+#endif
 
 #endif

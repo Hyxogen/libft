@@ -1,6 +1,7 @@
 #include <ft/math.h>
 #include <stdint.h>
 
+#ifdef __STDC_IEC_559__
 int ft___signbit(double x)
 {
 	union {
@@ -40,3 +41,4 @@ float ft_fmaxf(float x, float y)
 		return ft_signbit(x) ? y : x;
 	return x > y ? x : y;
 }
+#endif
